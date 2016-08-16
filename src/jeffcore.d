@@ -10,7 +10,6 @@ import dscord.core,
        dscord.util.queue,
        dscord.util.counter;
 
-import jeff.perms;
 import vibe.core.core : sleep;
 
 // Extra struct used for storing a light amount of message data.
@@ -133,7 +132,7 @@ class CorePlugin : Plugin {
 
   @Command("heapstats")
   @CommandDescription("get stats about the message heap")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onHeapStats(CommandEvent event) {
     string msg = "";
     msg ~= format("Total Channels: %s\n", this.msgHistory.length);
@@ -143,7 +142,7 @@ class CorePlugin : Plugin {
 
   @Command("clean")
   @CommandDescription("clean chat by deleting previously sent messages")
-  @CommandLevel(UserGroup.MOD)
+  @CommandLevel(Level.MOD)
   void onClean(CommandEvent event) {
     if ((event.msg.channel.id in this.msgHistory) is null || this.msgHistory[event.msg.channel.id].empty) {
       event.msg.reply("No previously sent messages in this channel!").after(3.seconds).del();
@@ -168,7 +167,7 @@ class CorePlugin : Plugin {
   @Command("counts")
   @CommandGroup("event")
   @CommandDescription("view event counters")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onEventStats(CommandEvent event) {
     ushort numEvents = 5;
     if (event.args.length >= 1) {
@@ -186,7 +185,7 @@ class CorePlugin : Plugin {
   @Command("show")
   @CommandGroup("event")
   @CommandDescription("view stats on a specific event")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onEvent(CommandEvent event) {
     if (event.args.length < 1) {
       event.msg.reply("Please pass an event to view");
@@ -219,7 +218,7 @@ class CorePlugin : Plugin {
   @Command("reload")
   @CommandGroup("plugin")
   @CommandDescription("reload a plugin")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onPluginReload(CommandEvent e) {
     auto plugin = this.pluginCommand(e, "reload");
 
@@ -234,7 +233,7 @@ class CorePlugin : Plugin {
   @Command("unload")
   @CommandGroup("plugin")
   @CommandDescription("unload a plugin")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onPluginUnload(CommandEvent e) {
     auto plugin = this.pluginCommand(e, "unload");
 
@@ -249,7 +248,7 @@ class CorePlugin : Plugin {
   @Command("load")
   @CommandGroup("plugin")
   @CommandDescription("load a plugin by path")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onPluginLoad(CommandEvent e) {
     if (e.args.length != 1) {
       e.msg.reply("Must provide a DLL path to load");
@@ -264,14 +263,14 @@ class CorePlugin : Plugin {
   @Command("list")
   @CommandGroup("plugin")
   @CommandDescription("list all plugins")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onPluginList(CommandEvent e) {
     e.msg.replyf("Plugins: `%s`", this.bot.plugins.keys.join(", "));
   }
 
   @Command("save")
   @CommandDescription("save all storage")
-  @CommandLevel(UserGroup.ADMIN)
+  @CommandLevel(Level.ADMIN)
   void onSave(CommandEvent e) {
     foreach (plugin; this.bot.plugins.values) {
       if (plugin.storage) {
