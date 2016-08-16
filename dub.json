@@ -1,5 +1,5 @@
 {
-  "name": "jeffcore",
+  "name": "jeff-core",
   "targetType": "dynamicLibrary",
   "dependencies": {
     "jeff": {"path": "../../"}
