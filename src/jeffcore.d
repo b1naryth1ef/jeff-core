@@ -3,7 +3,8 @@ module jeffcore;
 import std.format,
        std.conv,
        std.array,
-       std.algorithm.iteration;
+       std.algorithm.iteration,
+       std.algorithm.searching;
 
 import dscord.core,
        dscord.util.emitter,
@@ -89,6 +90,24 @@ class CorePlugin : Plugin {
     }
 
     auto msgs = this.msgHistory[event.channelID].array.filter!(msg => msg.id != event.id);
+    this.msgHistory[event.channelID].clear();
+    assert(this.msgHistory[event.channelID].push(msgs.array));
+  }
+
+  @Listener!MessageDeleteBulk()
+  void onMessageDeleteBulk(MessageDeleteBulk event) {
+    if ((event.channelID in this.msgHistory) is null) {
+      return;
+    }
+
+    if (this.msgHistory[event.channelID].empty) {
+      return;
+    }
+
+    auto msgs = this.msgHistory[event.channelID].array.filter!(
+      msg => !event.ids.canFind(msg.id)
+    );
+
     this.msgHistory[event.channelID].clear();
     assert(this.msgHistory[event.channelID].push(msgs.array));
   }
